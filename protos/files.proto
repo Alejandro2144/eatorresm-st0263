@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+
+// Solicitud de la lista de archivos (no pide ningun request)
+message ListFilesRequest {
+}
+
+// Respuesta de la lista de archivos 
+message ListFilesResponse {
+  repeated File files = 1;
+}
+
+// Solicitud de búsqueda de archivos (pide un request)
+message SearchFilesRequest {
+  string query = 1;
+}
+
+// Respuesta de búsqueda de archivos 
+message SearchFilesResponse {
+  File files = 1;
+}
+
+// Abrir los archivos
+message File {
+    string filename = 1;
+    bytes file = 2;
+}
+
+// Definición del servicio para la lista de archivos y la búsqueda 
+service Files {
+  rpc GetFilesList (ListFilesRequest) returns (ListFilesResponse) {}
+  rpc SearchFiles (SearchFilesRequest) returns (SearchFilesResponse) {}
+}
+
+  
+
