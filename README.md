@@ -38,18 +38,14 @@ Para este reto, se implementaron 3 microservicios:
 
 - Concurrencia para cada microservicio.
 
-  
 
 ## 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
-  
-
 Todos los requerimientos fueron implementados.
 
-  
-
 # 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
-CARGAR IMAGEN
+
+! []() 
 
 Podemos observar 4 componentes fundamentales para el desarrollo y la arquitectura del proyecto:
 
@@ -66,7 +62,16 @@ El cliente hace una petición sea a través de su navegador web, o desde Postman
 
 # 3. Descripción del ambiente de desarrollo y técnico: lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
-PENDIENTE
+Todos los servicios fueron implementados con Python 3.10.6. En el proyecto, encontrará un archivo llamado "requirements.txt", donde se especifican la lista de bibliotecas utilizadas.
+
+    Flask==2.2.3
+    grpc==1.0.0
+    grpcio==1.51.3
+    pika==1.3.1
+    protobuf==4.22.0
+    python-dotenv==1.0.0
+
+Flask se utilizó para implementar la puerta de enlace API, grpcio es la biblioteca del kit de herramientas gRPC para implementar el microservicio 1 y pika es la biblioteca de cliente RabbitMQ para implementar el microservicio 2.
 
 ## como se compila y ejecuta.
 
@@ -83,18 +88,18 @@ Se implementó como primera instancia, el microservicio 1, este permite consulta
 
 ## detalles técnicos
 
-**- Arquitectura:** Microservicios
-**- Comunicacion entre microservicios:** gRPC y RabbitMQ
-**- Plataforma y servicios en nube:** Amazon AWS (EC2 Ubuntu, IPs elásticas)
-**- Orquestación del proyecto:** Docker
+- **Arquitectura:** Microservicios.
+- **Comunicacion entre microservicios:** gRPC y RabbitMQ.
+- **Plataforma y servicios en nube:** Amazon AWS (EC2 Ubuntu, IPs elásticas)
+- **Orquestación del proyecto:** Docker
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
 
-  
+
 
 PENDIENTE
 
-  
+
 
 ## opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
 
