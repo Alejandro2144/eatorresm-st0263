@@ -45,7 +45,7 @@ Todos los requerimientos fueron implementados.
 
 # 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
-! [Arquitectura](/Arquitectura.png)
+! [](arquitectura.png)
 
 Podemos observar 4 componentes fundamentales para el desarrollo y la arquitectura del proyecto:
 
@@ -75,8 +75,30 @@ Flask se utilizó para implementar la puerta de enlace API, grpcio es la bibliot
 
 ## como se compila y ejecuta.
 
-PENDIENTE
+El proyecto está dockerizado, por lo que deberás correr en primera instancia:
 
+sudo apt update
+sudo apt install docker.io -y
+sudo apt install docker-compose -y
+sudo apt install git -y
+
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -a -G docker ubuntu
+
+Cuando hayas corrido los comandos, deberas clonar el repositorio:
+
+git clone https://github.com/Alejandro2144/eatorresm-st0263.git
+
+Cuando hayas clonado el repositorio, deberas situarte en la carpeta eatorresm-st0263, y ejecutar:
+
+sudo docker-compose build
+
+Cuando se haya construido el contenedor, deberas levantarlo con:
+
+sudo docker-compose up
+
+Finalmente, deberás de esperar a que todo se ejecute y podrás utilizar el proyecto.
 ## detalles del desarrollo.
 
 Se implementó como primera instancia, el microservicio 1, este permite consultar los archivos mediante una comunicación gRPC. Luego de tener funcionando este microservicio, se procede a utilizar Flask como API Gateway. Finalmente se implementa el microservicio 2, el cual permite buscar los archivos mediante una query, y se comunica mediante MOM, precisamente con RabbitMQ.
@@ -95,15 +117,34 @@ Se implementó como primera instancia, el microservicio 1, este permite consulta
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
 
+Cada microservicio cuenta con su .env, donde:
 
+- Gateway: 
 
-PENDIENTE
+ROOT_PATH=/app/src/files
+HOST_GRPC=serv1-grpc
+HOST_RMQ=rabbitmq
+PORT_GRPC=50051
+PORT_RMQ=5672
+USER=guest
+PASSWORD=guest
 
+- Microservicio 1: 
 
+ROOT_PATH=/app/src/files
+SERVER_ADDRESS=serv1-grpc
+PORT=50051
 
+- Microservicio 2:
+
+HOST=rabbitmq
+PORT=5672
+USER=guest
+PASSWORD=guest
+QUEUE=archivo_rpc
 ## opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
 
-PENDIENTE
+! [](tree.png)
 
 # 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
@@ -111,15 +152,20 @@ PENDIENTE
 
 # IP o nombres de dominio en nube o en la máquina servidor.
 
-  PENDIENTE 
+La máquina virtual está corriendo en la siguiente ip elástica: 18.214.102.136:5000
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
 
-  PENDIENTE
+fffffff
 
 ## como se lanza el servidor.
 
-PENDIENTE  
+1. En su navegador ingrese a AWS.
+2. Acceda a EC2 y busque la instancia st0263-eatorresm
+3. Inicie la instancia y conectese a ella.
+4. Dirijase al directorio correspondiente: /eatorresm-st0263
+5. Corra sudo docker-compose up
+6. Espere a que se inicialicen. 
 
 ## una mini guia de como un usuario utilizaría el software o la aplicación
 
