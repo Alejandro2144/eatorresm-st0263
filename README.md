@@ -36,7 +36,7 @@ Todos los requerimientos fueron implementados.
 
 # 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
-![](arquitectura.png)
+![](./images/arquitectura.png)
 
 Podemos observar 4 componentes fundamentales para el desarrollo y la arquitectura del proyecto:
 
@@ -135,7 +135,7 @@ Cada microservicio cuenta con su .env, donde:
     QUEUE=archivo_rpc
 ## opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
 
-![](tree.png)
+![](./images/tree.png)
 
 # 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
@@ -177,7 +177,12 @@ Con Postman funciona similar, solicitamos una petición GET, y en parámetros de
 
 ## opcionalmente - si quiere mostrar resultados o pantallazos
 
+### Listar archivos (GET -> files)
 
+![](./images/files.png)
+
+### Buscar archivos (GET -> search-files)
+![](./images/search-files.png)
 
 # referencias:
 
