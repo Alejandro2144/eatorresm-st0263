@@ -45,7 +45,7 @@ Todos los requerimientos fueron implementados.
 
 # 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
-! [Arquitectura](./Arquitectura.png)
+! [Arquitectura](/Arquitectura.png)
 
 Podemos observar 4 componentes fundamentales para el desarrollo y la arquitectura del proyecto:
 

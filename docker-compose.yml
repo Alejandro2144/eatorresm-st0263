@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+  gateway:
+    build:
+      context: ./gateway
+    command: python ./src/app.py
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./gateway/.env
+    volumes:
+      - ./gateway:/app
+    networks:
+      - reto-2
+    depends_on:
+      - rabbitmq
+      - serv1-grpc
+
+  serv1-grpc:
+    build:
+      context: ./serv1-grpc
+    env_file:
+      - ./serv1-grpc/.env
+    volumes:
+      - ./serv1-grpc:/app
+    networks:
+      - reto-2
+    expose:
+      - 50051
+    ports:
+      - "50051:50051"
+
+  serv2-mom:
+    build:
+      context: ./serv2-mom
+    command: python ./src/consumerRMQ.py
+    env_file:
+      - ./serv2-mom/.env
+    volumes:
+      - ./serv2-mom:/app
+    networks:
+      - reto-2
+    depends_on:
+      - gateway
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    expose:
+      - 5672
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+    - ./config-RMQ/config.json:/etc/rabbitmq/definitions.json
+    networks:
+      - reto-2
+
+networks:
+  reto-2:
