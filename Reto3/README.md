@@ -5,10 +5,10 @@
 # Profesor: Edwin Nelson Montoya Munera, emontoya@eafit.edu.co
 
 
-# Reto 2
+# Reto 3
 
 
-# 1. breve descripción de la actividad
+# 1. Breve descripción de la actividad
 
 Desplegar un CMS wordpress empleando contenedores, con dominio propio dominio y certificado SSL.
 
@@ -27,7 +27,7 @@ Se utilizará Nginx como balanceador de cargas, dos servidores adicionales tanto
 
 Todos los requerimientos fueron implementados.
 
-# 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
+# 2. Información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
 ![](./files/Diagrama%20Reto%203%20Topicos.png)
 
@@ -52,46 +52,45 @@ Wordpress 2: 10.128.0.9
 DB MySQL: 10.128.0.12
 NFS: 10.128.0.11
 
-
-## como se compila y ejecuta.
+## Como se compila y ejecuta.
 
 1. El proyecto está dockerizado, por lo que deberás correr en primera instancia:
 
 Para cada maquina se tiene que verificar de que los contenedores esten up y para eso se tiene que subir los docker-compose para cada una de la maquina.
 
-Para la maquina de la base de datos:
+1. Para la maquina de la base de datos:
 
 Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> db
 
 Después utilizar el siguiente comando:
 
-docker-compose -f docker-compose-db.yml up -d
+    docker-compose -f docker-compose-db.yml up -d
 
-Para la maquina de Wordpress 1:
-
-Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> wordpress
-
-Después utilizar el siguiente comando:
-
-docker-compose -f docker-compose-wordpress.yml up -d
-
-Para la maquina de Wordpress 2:
+2. Para la maquina de Wordpress 1:
 
 Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> wordpress
 
 Después utilizar el siguiente comando:
 
-docker-compose -f docker-compose-wordpress.yml up -d
+    docker-compose -f docker-compose-wordpress.yml up -d
 
-Para la maquina de NGINX:
+3. Para la maquina de Wordpress 2:
+
+Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> wordpress
+
+Después utilizar el siguiente comando:
+
+    docker-compose -f docker-compose-wordpress.yml up -d
+
+4. Para la maquina de NGINX:
 
 Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> nginx
 
 Después utilizar el siguiente comando:
 
-docker-compose -f docker-compose-nginx up -d
+    docker-compose -f docker-compose-nginx up -d
 
-Despues, podrás ingresar al dominio: https://www.eatorresm.lat
+5. Despues, podrás ingresar al dominio: https://www.eatorresm.lat
 
 ## Detalles del desarrollo.
 
@@ -224,9 +223,6 @@ Base de Datos: Base de datos mysql aislada pero conectada con ambos Wordpress.
 
 # referencias:
 
-  - https://grpc.io/docs/what-is-grpc/introduction/
-  - https://grpc.io/docs/languages/python/basics/
-  - https://www.rabbitmq.com/tutorials/tutorial-six-python.html
-  - https://flask.palletsprojects.com/en/2.2.x/quickstart/
-
-#### versión README.md -> 1.0 (2022-agosto)
+- https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-22-04
+- https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/
+- https://github.com/st0263eafit/st0263-231/tree/main/docker-nginx-wordpress-ssl-letsencrypt
