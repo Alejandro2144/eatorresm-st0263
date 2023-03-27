@@ -9,26 +9,19 @@
 
 
 # 1. breve descripción de la actividad
-Para este reto, se implementaron 3 microservicios:
 
-- **Microservicio 1:** Encargado de listar archivos a través de gRPC. Se comunica con el API Gateway.
+Desplegar un CMS wordpress empleando contenedores, con dominio propio dominio y certificado SSL.
 
-- **Microservicio 2:** Encargado de buscar archivos mediante una query a través de MOM (RabbitMQ). Se comunica con el API Gateway.
-
-- **Microservicio API Gateway:** Encargado de funcionar tanto como gateway como balanceador de cargas y proxy.
-  
+Se utilizará Nginx como balanceador de cargas, dos servidores adicionales tanto para la base de datos (DBServer) como para archivos (FileServer).
 
 ## 1.1. Qué aspectos cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
-- Implementación de microservicio 1.
-- Implementación de microservicio 2.
-- Implementación de microservicio API Gateway.
-- Comunicación vía gRPC para el microservicio 1.
-- Comunicación vía MOM (RabbitMQ) para el microservicio 2.
-- Comunicación API Rest entre cliente y API Gateway.
-- Archivos de configuración dinámicos.
-- Implementación de endpoints tanto para listar archivos como para buscar.
-- Concurrencia para cada microservicio.
+1. Aplicación wordpress dockerizada monolítica en varios nodos que mejore la disponibilidad de la aplicación.
+2. Implementar un balanceador de cargas basado en nginx que reciba el tráfico web https de Internet con múltiples instancias de procesamiento.
+3. Tener 2 instancias de procesamiento wordpress detrás del balanceador de cargas.
+4. Tener 1 instancia de bases de datos mysql.
+5. Tener 1 instancia de archivos distribuidos en NFS.
+6. Certificado SSL.
 
 ## 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
@@ -36,153 +29,198 @@ Todos los requerimientos fueron implementados.
 
 # 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
-![](./images/arquitectura.png)
+![](./files/Diagrama%20Reto%203%20Topicos.png)
 
-Podemos observar 4 componentes fundamentales para el desarrollo y la arquitectura del proyecto:
+Podemos observar 5 instancias fundamentales para el desarrollo y la arquitectura del proyecto:
 
-1. API Gateway.
-2. Microservicio 1.
-3. MOM (RabbitMQ).
-4. Microservicio 2.
+1. Nginx - Balanceador de carga y proxy.
+2. Wordpress 1.
+3. Wordpress 2.
+4. Base de datos MySQL.
+5. NFS Server
 
-El cliente hace una petición sea a través de su navegador web, o desde Postman. Éste se comunica mediante API Rest. El API Gateway a su vez se comunica mediante gRPC con el primer microservicio, el cual es el encargado de listar archivos. El segundo microservicio es mediante comunicación MOM, utilizando RabbitMQ. Este funciona con colas y es el encargado de buscar archivos a través de una query que el usuario pasa. Dependiendo del tipo de solicitud que se haga se toma una comunicación u otra.
+Arquitecuta: El reto incorpora un disñeo monolítico, donde hay varios nodos que aseguran la alta disponibilidad de la misma.
 
-- Se utilizó Python como lenguaje de programación.
-- Se utilizó Docker como orquestador del sistema.
-- Como buenas prácticas se hace uso de variables de entorno, métodos desacoplados y directorios bien distribuidos.
+Mejores prácticas: Implementación de contenedores (con una configuración óptima para el ahorro de recursos), certificado SSL, separación de recursos mediante directiorios y/o carpetas.
 
 # 3. Descripción del ambiente de desarrollo y técnico: lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
-Todos los servicios fueron implementados con Python 3.10.6. En el proyecto, encontrará un archivo llamado "requirements.txt", donde se especifican la lista de bibliotecas utilizadas.
 
-    Flask==2.2.3
-    grpc==1.0.0
-    grpcio==1.51.3
-    pika==1.3.1
-    protobuf==4.22.0
-    python-dotenv==1.0.0
+Nginx: 10.128.0.13
+Wordpress 1: 10.128.0.8
+Wordpress 2: 10.128.0.9
+DB MySQL: 10.128.0.12
+NFS: 10.128.0.11
 
-Flask se utilizó para implementar la puerta de enlace API, grpcio es la biblioteca del kit de herramientas gRPC para implementar el microservicio 1 y pika es la biblioteca de cliente RabbitMQ para implementar el microservicio 2.
 
 ## como se compila y ejecuta.
 
 1. El proyecto está dockerizado, por lo que deberás correr en primera instancia:
 
-    sudo apt update
-    sudo apt install docker.io -y
-    sudo apt install docker-compose -y
-    sudo apt install git -y
+Para cada maquina se tiene que verificar de que los contenedores esten up y para eso se tiene que subir los docker-compose para cada una de la maquina.
 
-    sudo systemctl enable docker
-    sudo systemctl start docker
-    sudo usermod -a -G docker ubuntu
+Para la maquina de la base de datos:
 
-2. Cuando hayas corrido los comandos, deberas clonar el repositorio:
+Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> db
 
-    git clone https://github.com/Alejandro2144/eatorresm-st0263.git
+Después utilizar el siguiente comando:
 
-3. Cuando hayas clonado el repositorio, deberas situarte en la carpeta eatorresm-st0263, y ejecutar:
+docker-compose -f docker-compose-db.yml up -d
 
-    sudo docker-compose build
+Para la maquina de Wordpress 1:
 
-4. Cuando se haya construido el contenedor, deberas levantarlo con:
+Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> wordpress
 
-    sudo docker-compose up
+Después utilizar el siguiente comando:
 
-5. Finalmente, deberás de esperar a que todo se ejecute y podrás utilizar el proyecto.
-## detalles del desarrollo.
+docker-compose -f docker-compose-wordpress.yml up -d
 
-Se implementó como primera instancia, el microservicio 1, este permite consultar los archivos mediante una comunicación gRPC. Luego de tener funcionando este microservicio, se procede a utilizar Flask como API Gateway. Finalmente se implementa el microservicio 2, el cual permite buscar los archivos mediante una query, y se comunica mediante MOM, precisamente con RabbitMQ.
+Para la maquina de Wordpress 2:
 
-- Proyecto desarrollado en Python.
-- Se orquestó mediante Docker.
-- Se utilizó Git como versión de controles.
-- Se desplegó en una máquina virtual de AWS.
+Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> wordpress
 
-## detalles técnicos
+Después utilizar el siguiente comando:
 
-- **Arquitectura:** Microservicios.
-- **Comunicacion entre microservicios:** gRPC y RabbitMQ.
-- **Plataforma y servicios en nube:** Amazon AWS (EC2 Ubuntu, IPs elásticas)
-- **Orquestación del proyecto:** Docker
+docker-compose -f docker-compose-wordpress.yml up -d
+
+Para la maquina de NGINX:
+
+Entrar a la maquina por SSH -> eatorresm-st0263 -> Reto3 -> nginx
+
+Después utilizar el siguiente comando:
+
+docker-compose -f docker-compose-nginx up -d
+
+Despues, podrás ingresar al dominio: https://www.eatorresm.lat
+
+## Detalles del desarrollo.
+
+Los detalles mas importantes en el desarrollo fueron:
+
+1. En la maquina virtual de NGINX se tuvo que hacer un proceso mas largo, debido a que se debia de sacar la certificación para poder que el dominio corriera por https. Luego se tuvo que modificar el nginx.config para que actuara como LOAD BALANCER y que redireccionara la carga a los wordpress.
+
+2. En la maquina del NFS, se tuvo que colocar la siguiente linea en /etc/exports
+
+    /var/nfs/general    10.128.0.0/16(rw,sync,no_root_squash,no_subtree_check)
+
+Para poder tener la comunicacion con ambos wordpres y poder guardar los archivos en su respectiva carpeta.
+
+3. Para los Wordpress, se tuvo que agregar la dirección IP de la base de datos para cada docker-compose y ademas de eso se tuvo que realizar el comando
+
+    sudo mount 10.128.0.12:/var/nfs/general /mnt/wordpress
+
+Para poder montar los datos en el nfs y que ambos wordpress recogieran la misma información.
+
+## Detalles técnicos
+
+Plataforma y servicios en nube: Google Cloud Platform (Ubuntu 22.04 LTS x86-64)
+
+Orquestación del proyecto: Docker (en excepción del NFS-Server)
+
+Docker-compose de Nginx:
+
+  version: '3.1'
+  services:
+  nginx:
+      container_name: nginx
+      image: nginx
+      volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl
+      - ./ssl.conf:/etc/nginx/ssl.conf
+      ports:
+      - 80:80      
+      - 443:443
+
+Docker-compose de los Wordpress:
+
+  version: '3.1'
+  services:
+  wordpress:
+      container_name: wordpress
+      image: wordpress
+      ports:
+      - 80:80      
+      restart: always
+      environment:
+      WORDPRESS_DB_HOST: 10.128.0.12
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
+      volumes:
+      - /mnt/wordpress:/var/www/html
+
+Docker-compose de los Base de Datos:
+
+  version: '3.1'
+  services:
+  db:
+      image: mysql:5.7
+      restart: always
+      ports:
+      - 3306:3306 
+      environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      volumes:
+      - db:/var/lib/mysql
+  volumes:
+  db:
 
 ## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
 
-Cada microservicio cuenta con su .env, donde:
+En primer lugar se comenzo creando 5 maquinas virtuales (NGINX, WP1,WP2,BD,NFS) y todas con el mismo sistema operativo (Ubuntu 22.04 LTS).
 
-- Gateway: 
+- Para la maquina de Nginx se le crea una IP estática debido a que esta es la que va en el registro DNS del proveedor del dominio, tambien se le activan la conexión por http y https. Dentro de la maquina se hace la petición del certificado SSL para poder tener conexión https, despues de eso, se dockeriza con solo nginx para despues modificar el archivo .conf en donde se crea un upstream en donde redireccionara a dos direcciones IP's las cuales serán las internas de los wordpress.
 
-    ROOT_PATH=/app/src/files
-    HOST_GRPC=serv1-grpc
-    HOST_RMQ=rabbitmq
-    PORT_GRPC=50051
-    PORT_RMQ=5672
-    USER=guest
-    PASSWORD=guest
+- Para la base de datos, se creo sin necesidad de conexión http ni https, y solo se dockerizo.
 
-- Microservicio 1: 
+- Para el NFS-Server, se creo una maquina en donde no se dockerizo debido a que es la maquina que trae los mismos cambios y por ende se debio haber agregado en exportación una variable de entorno.
 
-    ROOT_PATH=/app/src/files
-    SERVER_ADDRESS=serv1-grpc
-    PORT=50051
+- Para los Wordpress, se crearon con conexión http y https no es necesario la IP estática, debido a que las conexiones se hicieron con la interna. Dentro de cada Wordpress, se modifico el docker-compose para que colocar la dirección interna de la base de datos. Luego se hizo el mount.
 
-- Microservicio 2:
-
-    HOST=rabbitmq
-    PORT=5672
-    USER=guest
-    PASSWORD=guest
-    QUEUE=archivo_rpc
 ## opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
 
-![](./images/tree.png)
+![](./files/Arbol.png)
 
 # 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
- Aplica el mismo lenguaje, librerías, paquetes y demás, utilizados en ambiente de desarrollo.
+El proyecto se realizo en 5 maquinas virtuales:
+
+Ngnix: Como un balanceador de cargas.
+
+Wordpress-1: Wordpress aislado.
+
+     nfs-common
+
+Wordpress-2: Wordpress aislado.
+
+     nfs-common
+
+Base de Datos: Base de datos mysql aislada pero conectada con ambos Wordpress.
+
+ NFS-Server: Servidor que sirve para que los cambios que se hagan en ambos wordpress se vean reflejados en la misma base de datos y no sean diferentes sino que cada uno tenga la misma copia en tiempo real.
+
+     nfs-kernel-server
 
 # IP o nombres de dominio en nube o en la máquina servidor.
 
-La máquina virtual está corriendo en la siguiente ip elástica: 18.214.102.136:5000
+- https://www.eatorresm.lat
 
-## descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
+## Como se lanza el servidor.
 
-Puesto que el proyecto se construyó utilizando docker-compose, el ambiente de ejecucion tanto en desarrollo como en producción es el mismo. Lo que se debe tener presente es que deben habilitar los puertos necesarios en AWS para permitir las comunicaciones.
+1. Se inicializan las maquinas.
+2. Entra al dominio.
+3. Se navega por el wordpress. En caso de que no cargue, se verifica en cada maquina virtual, menos la del nfs server, que los contenedores esten arriba.
 
-## como se lanza el servidor.
+## Registros de dominio 
 
-1. En su navegador ingrese a AWS.
-2. Acceda a EC2 y busque la instancia st0263-eatorresm
-3. Inicie la instancia y conectese a ella.
-4. Dirijase al directorio correspondiente: /eatorresm-st0263
-5. Corra sudo docker-compose up
-6. Espere a que se inicialicen. 
+![](./files/DNS.png)
 
-## una mini guia de como un usuario utilizaría el software o la aplicación
-
-Para conectarse al API Gateway se debe hacer una peticion HTTP a la IP elastica de AWS y al puerto 5000.
-
-Para conectarse, deberá hacer una petición HTPP a la siguiente ip elástica 
-
-    http://18.214.102.136:5000
-
-Ambas peticiones funcionan como un GET, por lo que podremos acceder a los endpoints: /files y /search-files
-
-    http://18.214.102.136:5000/files -> lista todos los archivos que se encuentran en el directorio.
-
-    http://18.214.102.136:5000/search-files?query=nombre_archivo -> busca el archivo con el nombre nombre_archivo en el directorio.
-
-
-Con Postman funciona similar, solicitamos una petición GET, y en parámetros debemos poner la query y el nombre del archivo a buscar en value (en caso de utilizar search-files). Las respuestas son en formatos .json.
-
-## opcionalmente - si quiere mostrar resultados o pantallazos
-
-### Listar archivos (GET -> files)
-
-![](./images/files.png)
-
-### Buscar archivos (GET -> search-files)
-![](./images/search-files.png)
+## Resultados 
+![](./files/Pagina.png)
 
 # referencias:
 
