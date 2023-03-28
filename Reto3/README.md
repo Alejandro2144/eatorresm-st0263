@@ -153,13 +153,13 @@ En primer lugar se comenzo creando 5 maquinas virtuales (NGINX, WP1,WP2,BD,NFS) 
 
 - Para el NFS-Server, se creo una maquina en donde no se dockerizo debido a que es la maquina que trae los mismos cambios y por ende se debio haber agregado en exportación una variable de entorno como se explica en el punto 3.2.
 
-- Para los Wordpress, se crearon con conexión http y https y no es era necesario la IP estática, debido a que las conexiones se hicieron con la interna. Dentro de cada Wordpress, se modifico el docker-compose para que colocar la dirección interna de la base de datos. Luego se hizo el mount, como se explico anteriormente en el punto 3.2.
+- Para los Wordpress, se crearon con conexión http y https no es necesario la IP estática, debido a que las conexiones se hicieron con la interna. Dentro de cada Wordpress, se modifico el docker-compose para que colocar la dirección interna de la base de datos. Luego se hizo el mount, como se explico anteriormente en el punto 3.2.
 
 
 
 # 3.5 Detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
 
-![](./assets/tree.png)
+![](./files/Arbol.png)
 
 # 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 
@@ -182,7 +182,7 @@ El proyecto se realizo en 5 maquinas virtuales:
         nfs-kernel-server
 
 # IP o nombres de dominio en nube o en la máquina servidor.
-- https://www.jasanchez.online : Es el dominio donde esta el Reto 3 completo.
+- https://www.eatorresm.lat
 
 ## Como se lanza el servidor.
 
@@ -191,10 +191,10 @@ El proyecto se realizo en 5 maquinas virtuales:
 3. Se navega por el wordpress. En caso de que no cargue, se verifica en cada maquina virtual, menos la del nfs server, que los contenedores esten arriba.
 
 ## Registros en Dominio
-![](./assets/Registros-DNS.png)
+![](./files/DNS.png)
 ## Resultados
 
-![](./assets/Resultado.png)
+![](./files/Pagina.png)
 
 
 # referencias:
