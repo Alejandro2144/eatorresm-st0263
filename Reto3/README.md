@@ -112,59 +112,59 @@ Para poder montar los datos en el nfs y que ambos wordpress recogieran la misma 
 
 ## Detalles técnicos
 
-Plataforma y servicios en nube: Google Cloud Platform (Ubuntu 22.04 LTS x86-64)
+- Plataforma y servicios en nube: Google Cloud Platform (Ubuntu 22.04 LTS x86-64)
 
-Orquestación del proyecto: Docker (en excepción del NFS-Server)
+- Orquestación del proyecto: Docker (en excepción del NFS-Server)
 
-Docker-compose de Nginx:
+- Docker-compose de Nginx:
 
-  version: '3.1'
-  services:
-  nginx:
-      container_name: nginx
-      image: nginx
-      volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl
-      - ./ssl.conf:/etc/nginx/ssl.conf
-      ports:
-      - 80:80      
-      - 443:443
+    version: '3.1'
+    services:
+    nginx:
+        container_name: nginx
+        image: nginx
+        volumes:
+        - ./nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./ssl:/etc/nginx/ssl
+        - ./ssl.conf:/etc/nginx/ssl.conf
+        ports:
+        - 80:80      
+        - 443:443
 
-Docker-compose de los Wordpress:
+- Docker-compose de los Wordpress:
 
-  version: '3.1'
-  services:
-  wordpress:
-      container_name: wordpress
-      image: wordpress
-      ports:
-      - 80:80      
-      restart: always
-      environment:
-      WORDPRESS_DB_HOST: 10.128.0.12
-      WORDPRESS_DB_USER: exampleuser
-      WORDPRESS_DB_PASSWORD: examplepass
-      WORDPRESS_DB_NAME: exampledb
-      volumes:
-      - /mnt/wordpress:/var/www/html
+    version: '3.1'
+    services:
+    wordpress:
+        container_name: wordpress
+        image: wordpress
+        ports:
+        - 80:80      
+        restart: always
+        environment:
+        WORDPRESS_DB_HOST: 10.128.0.12
+        WORDPRESS_DB_USER: exampleuser
+        WORDPRESS_DB_PASSWORD: examplepass
+        WORDPRESS_DB_NAME: exampledb
+        volumes:
+        - /mnt/wordpress:/var/www/html
 
-Docker-compose de los Base de Datos:
+- Docker-compose de los Base de Datos:
 
-  version: '3.1'
-  services:
-  db:
-      image: mysql:5.7
-      restart: always
-      ports:
-      - 3306:3306 
-      environment:
-      MYSQL_DATABASE: exampledb
-      MYSQL_USER: exampleuser
-      MYSQL_PASSWORD: examplepass
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
-      volumes:
-      - db:/var/lib/mysql
+    version: '3.1'
+    services:
+    db:
+        image: mysql:5.7
+        restart: always
+        ports:
+        - 3306:3306 
+        environment:
+        MYSQL_DATABASE: exampledb
+        MYSQL_USER: exampleuser
+        MYSQL_PASSWORD: examplepass
+        MYSQL_RANDOM_ROOT_PASSWORD: '1'
+        volumes:
+        - db:/var/lib/mysql
   volumes:
   db:
 
