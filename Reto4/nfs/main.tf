@@ -8,8 +8,8 @@ module "nfs" {
     project     = var.project_id
     network     = local.vpc_name
     export_paths = [
-    "/share/media",
-    "/share/static",
+    "/mnt/moodle",
+    "/mnt/moodledata"
     ]
-    capacity_gb = "100"
+    capacity_gb = "10"
 }

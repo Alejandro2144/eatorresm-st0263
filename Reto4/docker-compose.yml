@@ -7,11 +7,11 @@ services:
         - '80:8080'
         - '443:8443'
       environment:
-        - MOODLE_DATABASE_HOST=10.140.0.3
+        - MOODLE_DATABASE_HOST=10.140.0.2
         - MOODLE_DATABASE_PORT_NUMBER=3306
         - MOODLE_DATABASE_USER=bn_moodle
         - MOODLE_DATABASE_NAME=bitnami_moodle
         - MOODLE_DATABASE_PASSWORD=password
       volumes:
         - '/mnt/moodle:/bitnami/moodle'
-        - '/mnt/moodle:/bitnami/moodledata'
+        - '/mnt/moodledata:/bitnami/moodledata'

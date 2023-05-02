@@ -3,7 +3,7 @@ variable "project_name" {
     default = "reto4"
 }
 
-variable "enviroment" {
+variable "environment" {
     type = string
     default = "development"
 }
