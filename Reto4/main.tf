@@ -1,13 +1,69 @@
 provider "google" {
-credentials = file("kauth/reto4-moodle-bb7d3ecc0972.json")
-project = "reto4-moodle"
-region = "us-central1"
-zone = "us-central1-c"
+    credentials = file("kauth/reto4-moodle-bb7d3ecc0972.json")
+    project = "reto4-moodle"
+    region = "us-central1"
+    zone = "us-central1-c"
 }
 
 resource "google_compute_network" "reto4_network" {
-name = "reto4-network"
+    name = "reto4-network"
+    project = "reto4-moodle"
 }
+
+module "nfs" {
+    source      = "DeimosCloud/nfs/google"
+    name_prefix = "moodle-nfs"
+    labels      = {}
+    project     = "reto4-moodle"
+    network     = google_compute_network.reto4_network.name
+    export_paths = [
+        "/mnt/moodle",
+        "/mnt/moodledata"
+    ]
+    capacity_gb = "10"
+    attach_public_ip = true
+}
+
+resource "google_sql_database_instance" "moodle_db_primary" {
+    name             = "moodle-db-primary"
+    database_version = "POSTGRES_14"
+    region           = "us-central1"
+
+    settings {
+        # Second-generation instance tiers are based on the machine
+        # type. See argument reference below.
+        tier = "db-f1-micro"
+    }
+}
+
+resource "google_sql_database" "moodle_db" {
+  name     = "bitnami_moodle"
+  instance = google_sql_database_instance.moodle_db_primary.name
+}
+
+resource "google_sql_user" "users" {
+  name     = "bn_moodle"
+  instance = google_sql_database_instance.moodle_db_primary.name
+  password = "password"
+}
+
+resource "google_compute_target_pool" "reto4_target_pool" {
+    name = "reto4-target-pool"
+    project = "reto4-moodle"
+    region = "us-central1"
+}
+
+module "lb" {
+    source = "GoogleCloudPlatform/lb/google"
+    version = "2.2.0"
+    region = "us-central1"
+    name = "load-balancer"
+    service_port = 80
+    target_tags = ["reto4-target-pool"]
+    network = google_compute_network.reto4_network.name
+}
+
+
 
 resource "google_compute_autoscaler" "reto4_autoscaler" {
     name = "reto4-autoscaler"
@@ -46,11 +102,6 @@ tags = ["allow-lb-service"]
     }
 }
 
-resource "google_compute_target_pool" "reto4_target_pool" {
-    name = "reto4-target-pool"
-    project = "reto4-moodle"
-    region = "us-central1"
-}
 
 resource "google_compute_instance_group_manager" "reto_4_group_manager" {
     name = "reto4-igm"
@@ -62,56 +113,12 @@ resource "google_compute_instance_group_manager" "reto_4_group_manager" {
     }
 
     target_pools = [google_compute_target_pool.reto4_target_pool.self_link]
-    base_instance_name = "terraform"
+    base_instance_name = "st263"
 }
 
 data "google_compute_image" "reto4_moodle_image" {
-    name = "reto4-moodle"
+    name = "reto4-seed"
     project = "reto4-moodle"
 }
 
-module "lb" {
-    source = "GoogleCloudPlatform/lb/google"
-    version = "2.2.0"
-    region = "us-central1"
-    name = "load-balancer"
-    service_port = 80
-    target_tags = ["reto4-target-pool"]
-    network = google_compute_network.reto4_network.name
-}
 
-resource "google_sql_database_instance" "moodle_db_primary" {
-    name             = "moodle-db-primary"
-    database_version = "POSTGRES_14"
-    region           = "us-central1"
-
-    settings {
-        # Second-generation instance tiers are based on the machine
-        # type. See argument reference below.
-        tier = "db-f1-micro"
-    }
-}
-
-resource "google_sql_database" "moodle_db" {
-  name     = "bitnami_moodle"
-  instance = google_sql_database_instance.moodle_db_primary.name
-}
-
-resource "google_sql_user" "users" {
-  name     = "bn_moodle"
-  instance = google_sql_database_instance.moodle_db_primary.name
-  password = "password"
-}
-
-module "nfs" {
-    source      = "DeimosCloud/nfs/google"
-    name_prefix = "moodle-nfs"
-    labels      = {}
-    project     = "reto4-moodle"
-    network     = google_compute_network.reto4_network.name
-    export_paths = [
-        "/mnt/moodle",
-        "/mnt/moodledata"
-    ]
-    capacity_gb = "10"
-}
