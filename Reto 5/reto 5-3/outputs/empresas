@@ -1,0 +1,7 @@
+>>>>>>>>>> Dia con valor mínimo y máximo para cada empresa
+exito: ['2015-01-01', '2015-01-02']
+EPM: ['2015-01-02', '2015-01-01']
+>>>>>>>>>> Empresas con acciones iguales o mayores
+exito: Acciones crecientes o estables
+>>>>>>>>>> Dia con precios más bajos
+2015-01-01: 100.5
