@@ -102,14 +102,13 @@ Dentro de HUE o en el apartado de S3 de AWS, podemos revisar que la carpeta tmp/
 
 # 4.  Explicacion del notebook `Data_processing_using_PySpark`
 
-![]()
+![](https://github.com/Alejandro2144/eatorresm-st0263/blob/main/Reto%205/reto%205-3-2/Comentarios%20Data%20Processing.ipynb)
 
 - Este codigo nos permite entender como podemos manipular datos (datasets, etc) a traves de pyspark en el kernel de jupyer.
 - Es manipulacion habitual de datos como se hace con scipy, pandas o numpy pero todo a traves de pyspark
 - Encontramos maneras de agregar, quitar y derviar columnas. Tambien de encontrar medidas de centralizacion, etc.
 - **EN EL JUPYTER EN ESTE MISMO DIRECTORIO SE ENCUENTRA LA EXPLICACION LINEA POR LINEA**
 - Podemos encontrar el resutlado del notebook creado en persistencia en S3
-  ![resultado aws data processsing](https://github.com/jdramirezl/jdramirezl-st0263/assets/65835577/965e5816-8bab-4060-a3f0-945d0496579d)
 
 # Referencias
 
