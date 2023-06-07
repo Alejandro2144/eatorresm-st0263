@@ -1,6 +1,8 @@
 # Info de la materia: ST0263 Topicos Especiales en Telematica
 
-# Estudiante: Alejandro Torres Muñoz, eatorresm@eafit.edu.co
+# Estudiantes:
+- Alejandro Torres Muñoz, eatorresm@eafit.edu.co
+- Jose Alejandro Sánchez Sánchez, jasanchez@eafit.edu.co
 
 # Profesor: Edwin Nelson Montoya, emontoya@eafit.brightspace.com
 
@@ -104,11 +106,11 @@ Dentro de HUE o en el apartado de S3 de AWS, podemos revisar que la carpeta tmp/
 
 ![](https://github.com/Alejandro2144/eatorresm-st0263/blob/main/Reto%205/reto%205-3-2/Comentarios%20Data%20Processing.ipynb)
 
-- Este codigo nos permite entender como podemos manipular datos (datasets, etc) a traves de pyspark en el kernel de jupyer.
-- Es manipulacion habitual de datos como se hace con scipy, pandas o numpy pero todo a traves de pyspark
-- Encontramos maneras de agregar, quitar y derviar columnas. Tambien de encontrar medidas de centralizacion, etc.
-- **EN EL JUPYTER EN ESTE MISMO DIRECTORIO SE ENCUENTRA LA EXPLICACION LINEA POR LINEA**
-- Podemos encontrar el resutlado del notebook creado en persistencia en S3
+- Este código nos muestra cómo manipular datos (datasets, etc.) utilizando PySpark en el kernel de Jupyter.
+- Realizamos las manipulaciones de datos de manera similar a como se hace con scipy, pandas o numpy, pero todo a través de PySpark.
+-Exploramos diversas formas de agregar, eliminar y derivar columnas, así como de encontrar medidas de centralización, etc. Además, se encuentra disponible una explicación detallada línea por línea en el mismo directorio de este notebook en Jupyter.
+
+Finalmente, el resultado del notebook creado se puede encontrar persistido en S3.
 
 # Referencias
 
